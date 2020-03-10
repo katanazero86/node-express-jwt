@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const asyncify = require('express-asyncify');
 const session = require(`express-session`);
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -12,7 +13,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api/jwtApi');
 
-const app = express();
+const app = asyncify(express());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
