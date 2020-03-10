@@ -1,5 +1,7 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+import asyncify from 'express-asyncify';
+
+const router = asyncify(express.Router());
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -11,4 +13,4 @@ router.get('/', (req, res) => {
   res.send('Hello JWT');
 });
 
-module.exports = router;
+export default router;

@@ -1,19 +1,19 @@
-const createError = require('http-errors');
-const express = require('express');
-const asyncify = require('express-asyncify');
-const session = require(`express-session`);
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const dotenv = require('dotenv');
+import createError from 'http-errors';
+import express  from 'express';
+import asyncify from 'express-asyncify';
+import session from 'express-session';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const indexRouter = require('./routes/index');
-const apiRouter = require('./routes/api/jwtApi');
+// routes
+import indexRouter from './routes/index';
+import apiRouter from './routes/api/jwtApi';
 
 const app = asyncify(express());
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,4 +61,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;

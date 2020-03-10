@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const asyncify = require('express-asyncify');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import asyncify from 'express-asyncify';
 const router = asyncify(express.Router());
 
 // jwt encode
@@ -115,4 +115,4 @@ const asyncDecode = (req) => {
 };
 
 
-module.exports = router;
+export default router;
