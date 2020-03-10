@@ -8,10 +8,12 @@ router.post('/encode', async (req, res) => {
     const result = await asyncEncode(req);
 
     if(result.message === 'success') {
-        res.send(200);
+        res.json({
+            token : result.token
+        });
     } else {
         console.log(result.message);
-        res.send(400);
+        res.sendStatus(400);
     }
 
 });
@@ -19,9 +21,10 @@ router.post('/encode', async (req, res) => {
 // jwt decode
 router.get('/decode', (req, res) => {
     const session = req.session;
-    console.log(session);
 
-    res.send(200);
+    const authorization = req.headers['authorization'];
+
+    res.sendStatus(200);
 });
 
 // jwt 삭제
@@ -42,7 +45,7 @@ const asyncEncode = (req) => {
 
             session[token] = true;
 
-            resolve({message : 'success'});
+            resolve({message : 'success', token});
         } catch(error) {
             reject({message : error});
         }
