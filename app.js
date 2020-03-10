@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const session = require(`express-session`);
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -9,6 +10,7 @@ dotenv.config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api/jwtApi');
 
 const app = express();
 
@@ -21,14 +23,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret : process.env.sessionSecret,
+  resave: false,
+  saveUninitialized: true
+}));
 
-// set the secret key variable for jwt
 app.set('jwt-secret', process.env.secret);
-
-// index page, just for testing
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
