@@ -1,5 +1,4 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import asyncify from 'express-asyncify';
 
 const router = asyncify(express.Router());
