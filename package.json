@@ -1,6 +1,7 @@
 {
   "name": "node-test",
-  "version": "0.0.0",
+  "author": "zero86",
+  "version": "0.0.5",
   "private": true,
   "scripts": {
     "start": "nodemon --exec babel-node bin/www.js"
