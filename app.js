@@ -10,7 +10,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api/jwtApi');
 
 const app = asyncify(express());
@@ -34,12 +33,21 @@ app.use(session({
 app.set('jwt-secret', process.env.secret);
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
+});
+
+// error handler
+app.use( (err, req, res, next) => {
+  // error 템플릿에 전달할 데이터 설정
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 // error handler

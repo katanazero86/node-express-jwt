@@ -4,49 +4,69 @@ const asyncify = require('express-asyncify');
 const router = asyncify(express.Router());
 
 // jwt encode
-router.post('/encode', async (req, res) => {
+router.post('/encode', async (req, res, next) => {
 
-    const result = await asyncEncode(req);
-
-    if(result.message == 'success') {
-        res.json({
-            token : result.token
-        });
+    if(!req.body.name) {
+        const error = new Error('not param');
+        error.status = 500;
+        next(error);
     } else {
-        console.log(result.message);
-        res.sendStatus(500);
+        const result = await asyncEncode(req);
+
+        if(result.message == 'success') {
+            res.json({
+                token : result.token
+            });
+        } else {
+            console.log(result.message);
+            res.sendStatus(500);
+        }
     }
 
 });
 
 // jwt decode
-router.get('/decode', async (req, res) => {
+router.get('/decode', async (req, res, next) => {
 
-    const result = await asyncDecode(req);
-
-    if(result.message == 'success') {
-        res.json({
-            decodeToken : result.decodeToken
-        });
+    if(!req.headers['authorization']) {
+        const error = new Error('not authorization');
+        error.status = 500;
+        next(error);
     } else {
-        console.log(result.message);
-        res.sendStatus(500);
+        const result = await asyncDecode(req);
+
+        if(result.message == 'success') {
+            res.json({
+                decodeToken : result.decodeToken
+            });
+        } else {
+            console.log(result.message);
+            res.sendStatus(500);
+        }
     }
 
 });
 
 // jwt 삭제
-router.delete('/destroy', (req, res) => {
-    const session = req.session;
-    const authorization = req.headers['authorization'];
-    if(session[authorization]) {
-        delete session[authorization];
-        res.json({
-            message : 'success'
-        })
+router.delete('/destroy', (req, res, next) => {
+
+    if(!req.headers['authorization']) {
+        const error = new Error('not authorization');
+        error.status = 500;
+        next(error);
     } else {
-        res.sendStatus(200);
+        const session = req.session;
+        const authorization = req.headers['authorization'];
+        if(session[authorization]) {
+            delete session[authorization];
+            res.json({
+                message : 'success'
+            })
+        } else {
+            res.sendStatus(200);
+        }
     }
+
 });
 
 
